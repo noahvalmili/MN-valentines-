@@ -59,6 +59,9 @@
       opacity: 0;
       transition: opacity 1s ease;
       max-width: 600px;
+      color: #fff8dc; /* Changed to a beautiful light color visible over background */
+      position: relative; /* Ensure message stays above fireworks */
+      z-index: 10;
     }
 
     canvas {
@@ -68,6 +71,7 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
+      z-index: 0;
     }
   </style>
 </head>
@@ -104,10 +108,8 @@
       startFireworks();
     });
 
-    // Initialize the No button at a random place
     moveButtonRandomly();
 
-    // Fireworks animation
     function startFireworks() {
       const canvas = document.getElementById('fireworks');
       const ctx = canvas.getContext('2d');
