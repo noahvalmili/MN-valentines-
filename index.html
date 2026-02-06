@@ -85,32 +85,35 @@
   <div class="message" id="message"></div>
   <canvas id="fireworks"></canvas>
 
-  <script>
-    const noButton = document.querySelector('.no');can
-    const yesButton = document.querySelector('.yes');
-    const messageDiv = document.getElementById('message');
+<script>
+window.onload = () => {
+  const noButton = document.querySelector('.no');
+  const yesButton = document.querySelector('.yes');
+  const messageDiv = document.getElementById('message');
 
-    const moveButtonRandomly = () => {
-  noButton.style.position = 'absolute'; // make it movable
-  const x = Math.random() * (window.innerWidth - noButton.offsetWidth);
-  const y = Math.random() * (window.innerHeight - noButton.offsetHeight);
-  noButton.style.left = x + 'px';
-  noButton.style.top = y + 'px';
+  const moveButtonRandomly = () => {
+    noButton.style.position = 'absolute';
+    const x = Math.random() * (window.innerWidth - noButton.offsetWidth);
+    const y = Math.random() * (window.innerHeight - noButton.offsetHeight);
+    noButton.style.left = x + 'px';
+    noButton.style.top = y + 'px';
+  };
+
+  noButton.addEventListener('mouseenter', moveButtonRandomly);
+
+  yesButton.addEventListener('click', () => {
+    yesButton.style.display = 'none';
+    noButton.style.display = 'none';
+    
+    document.querySelector('h1').style.display = 'none';
+    document.body.style.background = 'linear-gradient(135deg, #f9d5e5, #fce1f0)';
+
+    messageDiv.innerHTML = `✨ Yay! 🎆 <br><br>Dear Mili,<br><br>You just made my heart overflow with joy! 💖<br>I am so lucky to have you, and I can't wait to create beautiful memories together.<br>Thank you for being amazing, and I hope this Valentine’s Day is as special as you are!<br><br>Forever yours,<br>Noah 💌`;
+    messageDiv.style.opacity = 1;
+    startFireworks();
+  });
 };
-
-    noButton.addEventListener('mouseenter', moveButtonRandomly);
-
-    yesButton.addEventListener('click', () => {
-      yesButton.style.display = 'none';
-      noButton.style.display = 'none';
-      
-      document.querySelector('h1').style.display = 'none'; // hide question
-      document.body.style.background = 'linear-gradient(135deg, #f9d5e5, #fce1f0)'; // Valentine background
-
-      messageDiv.innerHTML = `✨ Yay! 🎆 <br><br>Dear Mili,<br><br>You just made my heart overflow with joy! 💖<br>I am so lucky to have you, and I can't wait to create beautiful memories together.<br>Thank you for being amazing, and I hope this Valentine’s Day is as special as you are!<br><br>Forever yours,<br>Noah 💌`;
-      messageDiv.style.opacity = 1;
-      startFireworks();
-    });
+</script>
     
 
     function startFireworks() {
