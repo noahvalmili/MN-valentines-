@@ -2,135 +2,176 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Be My Valentine ❤️</title>
-
-  <!-- Romantic Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine Surprise</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
+      padding: 0;
       height: 100vh;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      font-family: 'Poppins', sans-serif;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      color: #fff;
       overflow: hidden;
-
-      /* 🌹 Luxury rose background */
-      background-image:
-        linear-gradient(rgba(90, 0, 20, 0.55), rgba(90, 0, 20, 0.55)),
-        url("https://images.unsplash.com/photo-1509042239860-f550ce710b93");
-      background-size: cover;
-      background-position: center;
-    }
-
-    .card {
-      position: relative;
-      background: rgba(255, 255, 255, 0.94);
-      padding: 50px 55px;
-      border-radius: 22px;
       text-align: center;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.35);
-      max-width: 440px;
-      backdrop-filter: blur(6px);
     }
 
     h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.4rem;
-      color: #8b0e2f;
+      font-size: 3em;
       margin-bottom: 20px;
-    }
-
-    p {
-      font-size: 1.1rem;
-      line-height: 1.7;
-      color: #333;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
     }
 
     .buttons {
-      margin-top: 35px;
-      position: relative;
-      height: 60px;
+      display: flex;
+      gap: 40px;
+      margin-top: 20px;
     }
 
     button {
-      font-size: 1.05rem;
-      padding: 14px 34px;
+      padding: 15px 35px;
+      font-size: 1.5em;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
-      font-weight: 500;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: all 0.3s ease;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
     }
 
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    .yes {
+      background-color: #ff6b81;
+      color: #fff;
     }
 
-    #yesBtn {
-      background: linear-gradient(135deg, #c9184a, #ff4d6d);
-      color: white;
-      position: relative;
-      z-index: 2;
-    }
-
-    #noBtn {
-      background: #adb5bd;
-      color: white;
+    .no {
+      background-color: #ffe066;
+      color: #333;
       position: absolute;
-      left: 170px; /* starts next to Yes */
-      top: 0;
     }
 
-    .fireworks {
+    .message {
+      margin-top: 30px;
+      font-size: 1.8em;
+      opacity: 0;
+      transition: opacity 1s ease;
+      max-width: 600px;
+    }
+
+    canvas {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
-      display: none;
-      background:
-        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.9), transparent 40%),
-        radial-gradient(circle at 80% 40%, rgba(255,255,255,0.9), transparent 40%),
-        radial-gradient(circle at 50% 70%, rgba(255,255,255,0.9), transparent 40%);
-      animation: sparkle 0.8s infinite alternate;
-    }
-
-    @keyframes sparkle {
-      from { opacity: 0.4; }
-      to { opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-  <div class="card" id="card">
-    <h1>Will you be my Valentine, Mili? 🌹</h1>
-
-    <div class="buttons">
-      <button id="yesBtn">Yes 💘</button>
-      <button id="noBtn">No 🙄</button>
-    </div>
+  <h1>Hey Mili 💖, will you be my Valentine?</h1>
+  <div class="buttons">
+    <button class="yes">Yes</button>
+    <button class="no">No</button>
   </div>
 
-  <div class="fireworks" id="fireworks"></div>
+  <div class="message" id="message"></div>
+  <canvas id="fireworks"></canvas>
 
   <script>
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
-    const card = document.getElementById("card");
-    const fireworks = document.getElementById("fireworks");
+    const noButton = document.querySelector('.no');
+    const yesButton = document.querySelector('.yes');
+    const messageDiv = document.getElementById('message');
 
-    function moveNoButton() {
-      const cardRect = card.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
+    const moveButtonRandomly = () => {
+      const x = Math.random() * (window.innerWidth - noButton.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noButton.offsetHeight);
+      noButton.style.left = x + 'px';
+      noButton.style.top = y + 'px';
+    };
 
-      const maxX = cardRect.width - btnRect.width - 20;
-      const maxY = cardRect.height - btnRect.height - 20;
+    noButton.addEventListener('mouseenter', moveButtonRandomly);
 
-      const x =
+    yesButton.addEventListener('click', () => {
+      yesButton.style.display = 'none';
+      noButton.style.display = 'none';
+      messageDiv.innerHTML = `✨ Yay! 🎆 <br><br>Dear Mili,<br><br>You just made my heart overflow with joy! 💖<br>I am so lucky to have you, and I can't wait to create beautiful memories together.<br>Thank you for being amazing, and I hope this Valentine’s Day is as special as you are!<br><br>Forever yours,<br>Noah 💌`;
+      messageDiv.style.opacity = 1;
+      startFireworks();
+    });
+
+    // Initialize the No button at a random place
+    moveButtonRandomly();
+
+    // Fireworks animation
+    function startFireworks() {
+      const canvas = document.getElementById('fireworks');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const fireworks = [];
+
+      class Firework {
+        constructor(x, y, color) {
+          this.x = x;
+          this.y = y;
+          this.color = color;
+          this.particles = [];
+          for (let i = 0; i < 30; i++) {
+            this.particles.push({
+              x: this.x,
+              y: this.y,
+              vx: (Math.random() - 0.5) * 5,
+              vy: (Math.random() - 0.5) * 5,
+              alpha: 1
+            });
+          }
+        }
+
+        update() {
+          this.particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.alpha -= 0.02;
+          });
+          this.particles = this.particles.filter(p => p.alpha > 0);
+        }
+
+        draw(ctx) {
+          this.particles.forEach(p => {
+            ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${p.alpha})`;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+      }
+
+      function randomColor() {
+        return { r: Math.floor(Math.random()*255), g: Math.floor(Math.random()*255), b: Math.floor(Math.random()*255) };
+      }
+
+      function animate() {
+        ctx.fillStyle = 'rgba(0,0,0,0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (Math.random() < 0.05) {
+          fireworks.push(new Firework(Math.random()*canvas.width, Math.random()*canvas.height/2, randomColor()));
+        }
+        fireworks.forEach(f => {
+          f.update();
+          f.draw(ctx);
+        });
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+  </script>
+
+</body>
+</html>
